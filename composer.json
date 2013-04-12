@@ -1,0 +1,22 @@
+{
+    "name": "pluralize/pluralize",
+    "description": "A loose PHP port of the node pluralize package",
+    "homepage": "http://github.com/zomble/pluralize",
+    "authors": [
+        {
+            "name": "Paul Croker",
+            "email": "contact@zomble.com.au"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Pluralize": ""
+        }
+    }
+}
