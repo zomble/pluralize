@@ -21,12 +21,13 @@ class Pluralize
 	public function ruleset($rulesetClass = null)
 	{
 		if (!is_null($rulesetClass)) {
-			if ($rulesetClass instanceof \Pluralize\RuleSet) {
+			if ($rulesetClass instanceof RuleSet) {
 				$this->ruleset = $rulesetClass;
 			} else {
 				$this->ruleset = new $rulesetClass();
 			}
 		}
+
 		return $this->ruleset;
 	}
 
@@ -37,11 +38,37 @@ class Pluralize
 
 	public function singular($word)
 	{
-		return $word;
+		$restoreCase = $this->restoreWordCase($word);
+
+		if ($irregular = $this->ruleset()->irregular($word)) {
+			return $word;
+		}
+
+		foreach ($this->ruleset()->uncountableRules as $rule) {
+			$found = ($rule === $word || (@preg_match($rule, $word, $matches) !== false && count($matches)));
+			if ($found) {
+				return $word;
+			}
+		}
+
+		// There is no reverse look up, for plural to singular, so loop through them.
+		foreach ($this->ruleset()->irregularRules as $rule => $replacement) {
+			if ($replacement === $word) {
+				return $rule;
+			}
+		}
+
+		return $restoreCase($this->sanitize($word, $this->ruleset()->singularRules));
 	}
 
+	/**
+	 * @param $word
+	 * @return bool|mixed
+	 */
 	public function plural($word)
 	{
+		$restoreCase = $this->restoreWordCase($word);
+
 		if ($irregular = $this->ruleset()->irregular($word)) {
 			return $irregular;
 		}
@@ -53,12 +80,37 @@ class Pluralize
 			}
 		}
 
-		foreach ($this->ruleset()->pluralRules as $rule => $replacement) {
+		return $restoreCase($this->sanitize($word, $this->ruleset()->pluralRules));
+	}
+
+	/**
+	 * @param $word
+	 * @param $rules
+	 * @return string The word, or fixed word.
+	 */
+	protected function sanitize($word, $rules)
+	{
+		foreach ($rules as $rule => $replacement) {
 			$found = preg_replace($rule, $replacement, $word);
 			if ($found != $word) {
 				return $found;
 			}
 		}
+		return $word;
+	}
+
+	/**
+	 * Detect current casing, and restore automagicaly later through a callable;
+	 *
+	 * @param $token string
+	 *
+	 * @return \Callable
+	 */
+	protected function restoreWordCase($token)
+	{
+		return function ($word) {
+			return $word;
+		};
 	}
 }
 

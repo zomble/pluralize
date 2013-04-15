@@ -22,7 +22,22 @@ class PluralizeTest extends \PHPUnit_Framework_TestCase
 	public function testPluralization($test, $expected)
 	{
 		$pluralize = new Pluralize();
-		$result = $pluralize->fix($test);
+		$result = $pluralize->plural($test);
+		$this->assertEquals($expected, $result);
+	}
+
+	/**
+	 * Do the opposite.
+	 *
+	 * @param string $expected
+	 * @param string $test
+	 *
+	 * @dataProvider providerPlurals
+	 */
+	public function testSingular($expected, $test)
+	{
+		$pluralize = new Pluralize();
+		$result = $pluralize->singular($test);
 		$this->assertEquals($expected, $result);
 	}
 
