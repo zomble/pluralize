@@ -55,6 +55,19 @@ class PluralizeTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('5 ' . $plural, $pluralize->fix($single, 5, true));
 	}
 
+	/**
+	 * @param $test
+	 * @param $expected
+	 *
+	 * @dataProvider providerPlurals
+	 */
+	public function testAutomaticCasing($test, $expected) {
+		$test = strtoupper($test);
+		$expected = strtoupper($expected);
+		$pluralize = new Pluralize();
+		$this->assertEquals($pluralize->fix($test), $expected);
+	}
+
 	public function providerPlurals()
 	{
 		return array(

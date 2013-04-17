@@ -39,21 +39,22 @@ class Pluralize
 	public function singular($word)
 	{
 		$restoreCase = $this->restoreWordCase($word);
+		$word = strtolower($word);
 
 		if ($irregular = $this->ruleset()->irregular($word)) {
-			return $word;
+			return $restoreCase($word);
 		}
 
 		// There is no reverse look up, for plural to singular, so loop through them.
 		foreach ($this->ruleset()->irregularRules as $rule => $replacement) {
 			if ($replacement === $word) {
-				return $rule;
+				return $restoreCase($rule);
 			}
 		}
 
 		$found = $this->ruleset()->uncountable($word);
 		if ($found) {
-			return $word;
+			return $restoreCase($word);
 		}
 
 		return $restoreCase($this->sanitize($word, $this->ruleset()->singularRules));
@@ -66,14 +67,15 @@ class Pluralize
 	public function plural($word)
 	{
 		$restoreCase = $this->restoreWordCase($word);
+		$word = strtolower($word);
 
 		if ($irregular = $this->ruleset()->irregular($word)) {
-			return $irregular;
+			return $restoreCase($irregular);
 		}
 
 		$found = $this->ruleset()->uncountable($word);
 		if ($found) {
-			return $word;
+			return $restoreCase($word);
 		}
 
 
@@ -105,6 +107,12 @@ class Pluralize
 	 */
 	protected function restoreWordCase($token)
 	{
+		if ($token === strtoupper($token)) {
+			return function ($word) {
+				return strtoupper($word);
+			};
+		}
+
 		return function ($word) {
 			return $word;
 		};
