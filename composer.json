@@ -8,6 +8,7 @@
             "email": "contact@zomble.com.au"
         }
     ],
+    "license": "MIT",
     "require": {
         "php": ">=5.3.0"
     },
