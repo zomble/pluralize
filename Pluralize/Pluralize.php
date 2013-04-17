@@ -113,6 +113,12 @@ class Pluralize
 			};
 		}
 
+		if ($token === ucfirst($token)) {
+			return function ($word) {
+				return ucfirst($word);
+			};
+		}
+
 		return function ($word) {
 			return $word;
 		};

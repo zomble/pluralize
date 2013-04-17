@@ -22,8 +22,7 @@ class PluralizeTest extends \PHPUnit_Framework_TestCase
 	public function testPluralization($test, $expected)
 	{
 		$pluralize = new Pluralize();
-		$result = $pluralize->plural($test);
-		$this->assertEquals($expected, $result);
+		$this->assertEquals($expected, $pluralize->plural($test));
 	}
 
 	/**
@@ -37,8 +36,7 @@ class PluralizeTest extends \PHPUnit_Framework_TestCase
 	public function testSingular($expected, $test)
 	{
 		$pluralize = new Pluralize();
-		$result = $pluralize->singular($test);
-		$this->assertEquals($expected, $result);
+		$this->assertEquals($expected, $pluralize->singular($test));
 	}
 
 	/**
@@ -62,10 +60,23 @@ class PluralizeTest extends \PHPUnit_Framework_TestCase
 	 * @dataProvider providerPlurals
 	 */
 	public function testAutomaticCasing($test, $expected) {
+		$test = ucfirst($test);
+		$expected = ucfirst($expected);
+		$pluralize = new Pluralize();
+		$this->assertEquals($expected, $pluralize->fix($test));
+	}
+
+	/**
+	 * @param $test
+	 * @param $expected
+	 *
+	 * @dataProvider providerPlurals
+	 */
+	public function testAutomaticCapitalCasing($test, $expected) {
 		$test = strtoupper($test);
 		$expected = strtoupper($expected);
 		$pluralize = new Pluralize();
-		$this->assertEquals($pluralize->fix($test), $expected);
+		$this->assertEquals($expected, $pluralize->fix($test));
 	}
 
 	public function providerPlurals()
