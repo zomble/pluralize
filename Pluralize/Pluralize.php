@@ -33,7 +33,7 @@ class Pluralize
 
 	public function fix($word, $count = 0, $includeCount = false)
 	{
-		return ($includeCount ? $count + ' ' : '') . ($count === 1 ? $this->singular($word) : $this->plural($word));
+		return ($includeCount ? $count . ' ' : '') . ($count === 1 ? $this->singular($word) : $this->plural($word));
 	}
 
 	public function singular($word)
@@ -44,18 +44,16 @@ class Pluralize
 			return $word;
 		}
 
-		foreach ($this->ruleset()->uncountableRules as $rule) {
-			$found = ($rule === $word || (@preg_match($rule, $word, $matches) !== false && count($matches)));
-			if ($found) {
-				return $word;
-			}
-		}
-
 		// There is no reverse look up, for plural to singular, so loop through them.
 		foreach ($this->ruleset()->irregularRules as $rule => $replacement) {
 			if ($replacement === $word) {
 				return $rule;
 			}
+		}
+
+		$found = $this->ruleset()->uncountable($word);
+		if ($found) {
+			return $word;
 		}
 
 		return $restoreCase($this->sanitize($word, $this->ruleset()->singularRules));
@@ -73,12 +71,11 @@ class Pluralize
 			return $irregular;
 		}
 
-		foreach ($this->ruleset()->uncountableRules as $rule) {
-			$found = ($rule === $word || (@preg_match($rule, $word, $matches) !== false && count($matches)));
-			if ($found) {
-				return $word;
-			}
+		$found = $this->ruleset()->uncountable($word);
+		if ($found) {
+			return $word;
 		}
+
 
 		return $restoreCase($this->sanitize($word, $this->ruleset()->pluralRules));
 	}

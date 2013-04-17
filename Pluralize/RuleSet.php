@@ -186,9 +186,15 @@ class RuleSet
 		return isset($this->irregularRules[$word]) ? $this->irregularRules[$word] : false;
 	}
 
-	public function uncountable()
+	public function uncountable($word)
 	{
-
+		foreach ($this->uncountableRules as $rule) {
+			$found = ($rule === $word || (@preg_match($rule, $word, $matches) !== false && count($matches)));
+			if ($found) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

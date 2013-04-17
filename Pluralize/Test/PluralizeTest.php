@@ -41,6 +41,20 @@ class PluralizeTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($expected, $result);
 	}
 
+	/**
+	 * @param $test
+	 * @param $expected
+	 *
+	 * @dataProvider providerPlurals
+	 */
+	public function testCount($single, $plural) {
+		$pluralize = new Pluralize();
+		$this->assertEquals('1 ' . $single, $pluralize->fix($plural, 1, true));
+		$this->assertEquals('5 ' . $plural, $pluralize->fix($single, 5, true));
+		$this->assertEquals('1 ' . $single, $pluralize->fix($plural, 1, true));
+		$this->assertEquals('5 ' . $plural, $pluralize->fix($single, 5, true));
+	}
+
 	public function providerPlurals()
 	{
 		return array(
