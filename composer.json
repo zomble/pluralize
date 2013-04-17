@@ -1,5 +1,5 @@
 {
-    "name": "Pluralize",
+    "name": "zomble/Pluralize",
     "description": "A loose PHP port of the node pluralize package",
     "homepage": "http://github.com/zomble/pluralize",
     "authors": [
