@@ -9,4 +9,4 @@ script:
   - mkdir -p ./build/logs
   - ./vendor/bin/phpunit
 after_script:
-  - php ./vendor/bin/coveralls.php
+  - php ./vendor/bin/coveralls
