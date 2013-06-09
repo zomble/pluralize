@@ -7,6 +7,6 @@ before_script:
   - composer install --dev --no-interaction
 script:
   - mkdir -p ./build/logs
-  - ./vendor/bin/phpunit
+  - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 after_script:
   - php ./vendor/bin/coveralls
